@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://code.jquery.com/pep/0.4.2/pep.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+        var engine = new BABYLON.Engine(canvas, true);
+
+        var url = "https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js";
+        var s = document.createElement("script");
+        s.src = url;
+        document.head.appendChild(s);
+        var a=document.createElement("a");
+        var createScene = function () {
+        
+            var scene = new BABYLON.Scene(engine);
+            var cam = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+        
+            scene.sceneCamera=null;
+        	scene.animatedCamera=null;
+            scene.animatedCameraParent=null;
+        
+            var url = "https://raw.githubusercontent.com/snout-o/misc/master/",
+            texturepath="http://snou.to/tests/babylonjs/animation/test5/textures/"; 
+        
+            BABYLON.SceneLoader.loggingLevel = BABYLON.SceneLoader.DETAILED_LOGGING;
+        
+            // create simple anchor button
+            var btn=document.createElement("a");
+            var btntext = document.createTextNode("Reset camera"); 
+            btn.appendChild(btntext); 
+            var id=document.createAttribute("id");
+            id.value="resetViewBtn";
+            btn.setAttributeNode(id);
+            var style=document.createAttribute("style");
+            style.value="display:none;top:50px;left:52%;position: absolute;background-color: white;color: black;font-weight: bold;";
+            btn.setAttributeNode(style);
+            var href=document.createAttribute("href");
+            href.value="#";
+            btn.setAttributeNode(href);
+            var rendercanvas = document.getElementById("waitDiv"); 
+            document.body.insertBefore(btn, rendercanvas); 
+        
+            BABYLON.SceneLoader.Append(url, "kk_white.babylon", scene);
+            scene.executeWhenReady(function () {
+        
+                // helper functions
+                var __setMeshImage=function(scene,mesh,imageSrc,diffuseColourHex,invert){
+                    mesh.material = new BABYLON.StandardMaterial("screenMaterial", scene);
+                    mesh.material.diffuseTexture = new BABYLON.Texture(
+                        imageSrc, 
+                        scene, 
+                        false, // mipmaps?
+                        invert // invert?
+                    );
+                    mesh.material.diffuseColor = new BABYLON.Color4.FromHexString(diffuseColourHex);
+                };
+        
+        
+                var __enableCamera=function(camera, enable, shouldAttachControl){
+                    camera.setEnabled(enable);
+                    if(shouldAttachControl===true){
+                        if(enable===true)
+                            camera.attachControl( canvas, false );
+                        else
+                            camera.detachControl( canvas );
+                    }
+                }
+        
+                scene.ambientColor = new BABYLON.Color3(1,1,1);
+        
+                var skybox = BABYLON.Mesh.CreateBox("skyBox", 200.0, scene);
+                var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+                skyboxMaterial.backFaceCulling = false;
+                skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(texturepath + "TropicalSunnyDay", scene);
+                skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+                skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+                skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                skyboxMaterial.disableLighting = true;
+                skybox.material = skyboxMaterial;
+                skybox.renderingGroupId = 0;
+        
+               scene.sceneCamera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+                
+                __enableCamera( scene.sceneCamera, true, true );
+                scene.sceneCamera.lowerRadiusLimit = scene.sceneCamera.radius - 2.0;
+                scene.sceneCamera.upperRadiusLimit = scene.sceneCamera.radius + 8.0;
+                scene.sceneCamera.lowerAlphaLimit = 4.32;
+                scene.sceneCamera.upperAlphaLimit = 5.90;
+                scene.sceneCamera.upperBetaLimit = 1.35;
+                scene.sceneCamera.checkCollisions = false;
+                scene.sceneCamera.wheelPrecision = 100;
+                scene.activeCamera=scene.sceneCamera;
+                scene.activeCamera.maxZ = 1000;
+                scene.sceneCamera.lockedTarget=scene.getMeshByName("Sea");
+        
+        
+        
+                var screen1 = scene.getMeshByName("Screen_1");
+                __setMeshImage( scene, screen1, texturepath+"kklogo.png", "#FFFFFFFF", false);
+                var screen2 = scene.getMeshByName("Screen_2");
+                __setMeshImage( scene, screen2, texturepath+"kklogo.png", "#FFFFFFFF", false);
+                var screen3 = scene.getMeshByName("Screen_3");
+                __setMeshImage( scene, screen3, texturepath+"kklogo.png", "#FFFFFFFF", false);
+                var screen4 = scene.getMeshByName("Screen_4");
+                __setMeshImage( scene, screen4, texturepath+"kklogo.png", "#FFFFFFFF", false);
+        
+                var pointLight1=scene.getLightByName("Light.Point_1");
+                pointLight1.specular = new BABYLON.Color3(0,0,0);
+                pointLight1.includedOnlyMeshes.push(screen1);
+                var pointLight2=scene.getLightByName("Light.Point_2");
+                pointLight2.specular = new BABYLON.Color3(0,0,0);
+                pointLight2.includedOnlyMeshes.push(screen2);
+                var pointLight3=scene.getLightByName("Light.Point_3");
+                pointLight3.specular = new BABYLON.Color3(0,0,0);
+                pointLight3.includedOnlyMeshes.push(screen3);
+                var pointLight4=scene.getLightByName("Light.Point_4");
+                pointLight4.specular = new BABYLON.Color3(0,0,0);
+                pointLight4.includedOnlyMeshes.push(screen4);
+        
+                var onImagePicked = function(bjsEvent) {
+                    myPickedMesh = bjsEvent.source;
+                    console.log("@onAnyMeshPicked, myPickedMesh: ", myPickedMesh);
+                    if(!myPickedMesh.isPickable) return;
+                    // console.log("@onAnyMeshPicked, myPickedMesh: ", myPickedMesh);
+        
+                    var num = parseInt( myPickedMesh.name.replace(/[^0-9]/g,''), 10 );
+        
+                        // var tb = BABYLON.Mesh.CreateBox("tb", 2, scene);
+                        // tb.position = new BABYLON.Vector3(myPickedMesh.position.x,myPickedMesh.position.y,myPickedMesh.position.z);
+        
+                    var spawnpoint = scene.getMeshByName("cameraSpawnPoint_" + num);
+                    console.log(scene.sceneCamera.position,spawnpoint.position);
+        
+                    if(scene.animatedCamera===null && scene.animatedCameraParent===null){
+                        scene.animatedCamera = new BABYLON.ArcRotateCamera("scene.animatedCamera", Math.PI/2, Math.PI/2, 0.1, new BABYLON.Vector3.Zero(), scene);
+                        scene.animatedCamera.applyGravity=false;
+                        scene.animatedCamera.checkCollisions = false;
+                        scene.animatedCamera.wheelPrecision = 100;
+                        scene.animatedCamera.fov = scene.sceneCamera.fov;
+                        //scene.animatedCamera.lockedTarget=scene.sceneCamera.lockedTarget;
+                        scene.animatedCameraParent = BABYLON.Mesh.CreateBox("scene.animatedCameraParent", 0.1, scene);
+                        var material = new BABYLON.StandardMaterial(scene);
+                        
+                        // DEBUG: set to 1 to see parent, for production set to 0
+                        material.alpha = 1;
+                        // DEBUG: set material so we can see the box
+                        material.diffuseColor = new BABYLON.Color3(1.0, 0, 0);
+                        
+                        scene.animatedCameraParent.material = material;
+                        scene.animatedCamera.parent=scene.animatedCameraParent;
+                    }
+                    scene.animatedCameraParent.setEnabled(true);
+                    scene.animatedCameraParent.reverse=false;
+        
+                    scene.animatedCameraParent.position=new BABYLON.Vector3(scene.sceneCamera.position.x,scene.sceneCamera.position.y,scene.sceneCamera.position.z);
+        
+                    __enableCamera( scene.sceneCamera, false, true );
+        
+                    
+                    flyToPosition(scene.animatedCameraParent,spawnpoint,num,myPickedMesh);
+        
+                };
+        
+                var flyToPosition=function(cameraParent /*BABYLON.Vector3*/, target /*: BABYLON.Vector3*/, spawnPointNumber, lookAtTarget) {
+        
+                    var middleVector=null;
+                    switch(spawnPointNumber){
+                        case 1:
+                        case 2: 
+                        case 4: middleVector = new BABYLON.Vector3( target.position.x, target.position.y, (target.position.z+cameraParent.position.z) / 2 );break;
+                        case 3: middleVector = new BABYLON.Vector3( ( target.position.x + cameraParent.position.x ) / 2, target.position.y, target.position.z );break;
+                    }
+        
+                    // Animation keys
+                    var path = [];
+                    path.push(cameraParent.position);
+                    //path.push(cameraParent.position.subtract(target.position));
+                    path.push(middleVector);
+        
+                    //path.push(new BABYLON.Vector3(target.position.x,target.position.y,(target.position.z+cameraParent.position.z)/2));
+                    //path.push(new BABYLON.Vector3(target.position.x-4,target.position.y,target.position.z));
+                    path.push(target.position);
+        
+                    console.log(spawnPointNumber,path);
+        
+                    // DEBUG - show points as boxes in the scene
+                    for(var i=0;i<path.length;i++){
+                        var b = BABYLON.Mesh.CreateBox("target"+i, 0.1, scene);
+                        b.position=path[i];
+                    }
+                    
+                    var quadraticBezierVectors = BABYLON.Curve3.CreateQuadraticBezier(
+                        path[0],
+                        path[1],
+                        path[2],
+                    200);
+        
+        
+                    // Create Path3D from array of points
+                    cameraParent.points = quadraticBezierVectors.getPoints();
+                    
+                    // DEBUG: draw curve
+                    var quadraticBezierCurve = BABYLON.Mesh.CreateLines("catmullRom", quadraticBezierVectors.getPoints(), scene);
+                    quadraticBezierCurve.color=new BABYLON.Color3(1,0,0);
+        
+                    animateCameraAlongPath(cameraParent, target, lookAtTarget);
+                };
+                
+                
+                var doReverseCameraPathAnimation=function(e){
+                    e.preventDefault();
+                    console.log("reverse!");
+                    $("#resetViewBtn").hide();
+                    scene.animatedCameraParent.points=scene.animatedCameraParent.points.reverse();
+                    scene.animatedCameraParent.reverse=true;
+                    animateCameraAlongPath(scene.animatedCameraParent,scene.sceneCamera.lockedTarget);
+                };
+        
+        
+                var smoothSetTarget=function(camera, obj, time, done) {
+                    done=done||null;
+                    console.log(camera);
+                    var origRotation=new BABYLON.Vector3(camera.rotation.x,camera.rotation.y,camera.rotation.z);
+                    camera.lookAt(obj.position);
+                    var goalRotation = new BABYLON.Vector3(camera.rotation.x,camera.rotation.y,camera.rotation.z);
+                    camera.rotation = new BABYLON.Vector3(origRotation.x,origRotation.y,origRotation.z);
+        
+                    console.log(camera);
+                    var anim = BABYLON.Animation.CreateAndStartAnimation("anim", camera, "rotation", 24, 42, camera.rotation,
+            new BABYLON.Vector3(goalRotation.x,goalRotation.y,goalRotation.z), BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT, null,done);
+                    
+                    
+                };
+        
+                var animateCameraAlongPath=function(cameraParent,target,finalTarget){
+                    
+                    if(cameraParent.reverse===false) cameraParent.lookAt(scene.sceneCamera.lockedTarget.position);
+        
+                    __enableCamera( scene.animatedCamera, true, false );
+                    scene.activeCamera=scene.animatedCamera;
+                    
+                    smoothSetTarget(cameraParent, target, 2, function(){
+                    
+                        cameraParent.indexPoint = 0; //cameraParent.radius=0.1;
+                        cameraParent.lastIndexPoint = -1;
+        
+                        TweenMax.to(cameraParent, 4, {
+                            indexPoint: cameraParent.points.length - 1,
+                            ease: Linear.easeNone,
+                            onComplete: function() {
+                                console.log("complete!");scene.activeCamera=scene.animatedCamera;
+                                //cameraParent.setTarget(target);
+                                //scene.sceneCamera.attachControl(canvas, true);
+                                if(cameraParent.reverse===false) {
+                                    $("#resetViewBtn").show();
+                                }
+                                else{
+                                    __enableCamera( scene.animatedCamera, false, false );
+                                    __enableCamera( scene.sceneCamera, true, true );
+                                    scene.activeCamera=scene.sceneCamera;
+                                    //scene.sceneCamera.attachControl(canvas, true);
+                                }
+                            }.bind(cameraParent),
+                            onUpdate: function() {
+                                cameraParent.indexPoint = Math.round(cameraParent.indexPoint);
+                                if(cameraParent.lastIndexPoint < cameraParent.indexPoint){
+                                    cameraParent.lastIndexPoint = cameraParent.indexPoint;
+                                    cameraParent.position = cameraParent.points[cameraParent.indexPoint];
+        
+                                    if (cameraParent.reverse===false){
+                                        // if(cameraParent.indexPoint >= cameraParent.points)
+                                        //if(cameraParent.points[cameraParent.indexPoint + 1])  
+                                        //cameraParent.lookAt(cameraParent.points[cameraParent.points.length - 1]);
+                                        // else
+                                            cameraParent.lookAt(finalTarget.position);
+                                    }
+                                    else if(cameraParent.reverse===true){
+                                        //if(cameraParent.indexPoint <= 50 && cameraParent.points[cameraParent.indexPoint - 1])  
+                                        //cameraParent.lookAt(cameraParent.points[cameraParent.indexPoint-1]);
+                                        //else if(cameraParent.indexPoint > 50 )
+                                            cameraParent.lookAt(target.position);
+                                    }
+                                }
+                                
+                            }.bind(cameraParent)
+                        });
+                    });
+                };
+                
+        
+                $("#resetViewBtn").on("click",doReverseCameraPathAnimation);
+                var action = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, onImagePicked);
+        
+                // for every mesh, add actionManager & register action to execute onAnyMeshPicked func.
+                for (which in scene.meshes) {
+                    if(scene.meshes[which].name.indexOf("Screen_") > -1){
+                        scene.meshes[which].isPickable = true;
+                        scene.meshes[which].actionManager = new BABYLON.ActionManager(scene);
+                        scene.meshes[which].actionManager.registerAction(action); 
+                    }
+                    // DEBUG: show the spawnpoint cubes
+                    else if(scene.meshes[which].name.indexOf("cameraSpawnPoint") > -1){
+                        scene.meshes[which].material.alpha = 1;
+                    }
+                }
+        
+        
+            });
+                return scene;
+        };
+        
+        var scene = createScene()
+
+        engine.runRenderLoop(function () {
+            if (scene) {
+                scene.render();
+            }
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Blender MTL File: 'recup objets.blend'
+# Material Count: 1
+
+newmtl camion_bleu.1270
+Ns 96.078431
+Ka 0.342169 0.342169 0.342169
+Kd 0.059037 0.105686 0.108510
+Ks 0.011792 0.032831 0.048193
+Ke 0.090661 0.162300 0.166637
+Ni 1.000000
+d 1.000000
+illum 2
