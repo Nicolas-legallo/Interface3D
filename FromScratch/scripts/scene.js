@@ -616,6 +616,16 @@ var scaleX,scaleY,scaleZ;
     /** On récupère les éléments qui ont été créés dynamiquement grâce à jquery, dès que le document est chargé. On utilise jquery car
     les éléments ont été insérés via jquery */
     $(document).ready(function() {
+      $("#biblio").hide();
+      $("#formrotation").hide();
+      $(document).on("click","#toggler",function(){
+        $("#biblio").toggle(400);
+        return false;
+      });
+      $(document).on("click","#toggler2",function(){
+        $("#formrotation").toggle(400);
+        return false;
+      });
 
       $(document).on("click","#clickbox",function() { //ajout d'un cube
       addBox();
@@ -764,15 +774,6 @@ var scaleX,scaleY,scaleZ;
 //Affichage du plan ou non
 
     function checkGround() {
-      // SI ON SE SERT DU CHECKBOX POUR AFFICHER LE PLAN
-        // if ($("#checkground")[0].checked != false) {
-        //     ground.material = new BABYLON.StandardMaterial("material", scene);
-        // }
-        // if ($("#checkground")[0].checked == false) {
-        //     ground.material = groundMat;
-        // }
-
-        // SI ON SE SERT DE L'ONGLET DANS LE MENU EN HAUT
         if(masquer == false){
           ground.material = new BABYLON.StandardMaterial("material",scene);
         }
@@ -872,6 +873,8 @@ var scaleX,scaleY,scaleZ;
     return scene;
 }
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //   actualisation constante de la scène   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -891,6 +894,7 @@ canvas.addEventListener("mouseout", function() {
     var body = document.getElementById('body');
     body.style.overflow = "visible";
 })
+
 
 
 
