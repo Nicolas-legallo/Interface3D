@@ -13,15 +13,11 @@ var bounce = true;
 var masquer = false;
 engine.enableOfflineSupport =false;
 
-
-
-
 // Fonction principale du programme, retourne une scène possédant tous les paramètres et les attributs déclarés dans le corps de la fonction
 var createScene = function() {
 
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
-
 
     // DIFFERENTES COULEURS D'environnement
 
@@ -32,7 +28,6 @@ var createScene = function() {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //   Creation et gestion des cameras      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     //Arc camera
     var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
@@ -46,15 +41,11 @@ var createScene = function() {
     camera.lowerBetaLimit = 0.1;
     camera.upperBetaLimit = (Math.PI / 2) * 0.99;
     camera.lowerRadiusLimit = 150;
-
-
     camera.wheelPrecision = 0.5;
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////      Gestion de la lumière         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     var light = new BABYLON.PointLight("pointlight", new BABYLON.Vector3(-350,500,250), scene);
     light.specular = new BABYLON.Color3(0,0,0);
@@ -81,8 +72,6 @@ var createScene = function() {
     // skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     // skyboxMaterial.disableLighting = true;
     // skybox.material = skyboxMaterial;
-
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////    Création des ombres //////////////////////////////////////////////////////////////////////////
@@ -111,7 +100,6 @@ var createScene = function() {
     shadowGenerator.useContactHardeningShadow = true;
     shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////  Gestion de l'objet selectionné     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +116,6 @@ var scaleX,scaleY,scaleZ;
             $("#scalingZ").val(scaleZ);
         }
     });
-
 
 // Fonction qui fait "rebondir" l'objet sélectionné via une animation BabylonJS
     function setBounce(a) {
@@ -159,13 +146,9 @@ var scaleX,scaleY,scaleZ;
         }
     }
 
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    Creation des objets             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 // POSITIONNEMENT DES 4 MURS D'ENCEINTE
 
@@ -229,7 +212,6 @@ mur4.material.emissiveColor = new BABYLON.Color3(115/255,115/255,115/255);
 // shadowGenerator3.getShadowMap().renderList.push(mur4);
 // shadowGenerator4.getShadowMap().renderList.push(mur4);
 
-
 // MURS INT2RIEURS
 
 var mur5 = new BABYLON.Mesh.CreateBox('mur5',10,scene);
@@ -262,7 +244,6 @@ mur6.material.emissiveColor = new BABYLON.Color3(115/255,115/255,115/255);
 // shadowGenerator3.getShadowMap().renderList.push(mur6);
 // shadowGenerator4.getShadowMap().renderList.push(mur6);
 
-
 var mur7 = new BABYLON.Mesh.CreateBox('mur7',10, scene);
 mur7.position = new BABYLON.Vector3(
   4.5,
@@ -293,7 +274,6 @@ mur8.material.emissiveColor = new BABYLON.Color3(115/255,115/255,115/255);
 // shadowGenerator3.getShadowMap().renderList.push(mur8);
 // shadowGenerator4.getShadowMap().renderList.push(mur8);
 
-
 var mur9 = new BABYLON.Mesh.CreateBox('mur9',10,scene);
 mur9.position = new BABYLON.Vector3(
   53,
@@ -309,7 +289,6 @@ mur9.material.emissiveColor = new BABYLON.Color3(115/255,115/255,115/255);
 // shadowGenerator3.getShadowMap().renderList.push(mur9);
 // shadowGenerator4.getShadowMap().renderList.push(mur9);
 
-
 var mur10 = new BABYLON.Mesh.CreateBox('mur10',10,scene);
 mur10.position = new BABYLON.Vector3(
   100,
@@ -324,9 +303,6 @@ mur10.material.emissiveColor = new BABYLON.Color3(115/255,115/255,115/255);
 // shadowGenerator2.getShadowMap().renderList.push(mur10);
 // shadowGenerator3.getShadowMap().renderList.push(mur10);
 // shadowGenerator4.getShadowMap().renderList.push(mur10);
-
-
-
 
 //POSITIONNEMENT DES MACHINES
 var cubeligneprod1;
@@ -384,10 +360,6 @@ var cubeligneprod8;
                 cubeligneprod2.position = new BABYLON.Vector3(mesh.position.x-3.5,9,mesh.position.z +28);
                 cubeligneprod2.isVisible = false;
 
-
-
-
-
                 // shadowGenerator.getShadowMap().renderList.push(mesh);
                 // shadowGenerator2.getShadowMap().renderList.push(mesh);
                 // shadowGenerator3.getShadowMap().renderList.push(mesh);
@@ -418,7 +390,6 @@ var cubeligneprod8;
                           shadowGenerator3.getShadowMap().renderList.push(mesh);
                           shadowGenerator4.getShadowMap().renderList.push(mesh);
 
-
                             var ligneprod4 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "ligneProd.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
                                   var mesh = newMeshes[0];
                                   var mate = new BABYLON.StandardMaterial("mat",scene);
@@ -444,7 +415,6 @@ var cubeligneprod8;
                                   // shadowGenerator3.getShadowMap().renderList.push(mesh);
                                   // shadowGenerator4.getShadowMap().renderList.push(mesh);
                                   createFlux(new BABYLON.Vector3(cubeligneprod3.position.x,cubeligneprod3.position.y, cubeligneprod3.position.z), new BABYLON.Vector3(cubeligneprod4.position.x,cubeligneprod4.position.y, cubeligneprod4.position.z));
-
 
                                     var ligneprod5 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "ligneProd.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
                                           var mesh = newMeshes[0];
@@ -546,21 +516,14 @@ var cubeligneprod8;
                                                                 // shadowGenerator4.getShadowMap().renderList.push(mesh);
 
                                                                 createFlux(new BABYLON.Vector3(cubeligneprod8.position.x, cubeligneprod8.position.y, cubeligneprod8.position.z), new BABYLON.Vector3(cubeligneprod7.position.x, cubeligneprod7.position.y, cubeligneprod7.position.z));
-
-
                                                             });
                                                         });
-
                                               });
                                   });
                             });
                       });
-
               });
         });
-
-
-
 
 var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "stockage.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
       var mesh = newMeshes[0];
@@ -581,7 +544,6 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
       // shadowGenerator2.getShadowMap().renderList.push(mesh);
       // shadowGenerator3.getShadowMap().renderList.push(mesh);
       // shadowGenerator4.getShadowMap().renderList.push(mesh);
-
     });
     var stockage2 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "stockage.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
           var mesh = newMeshes[0];
@@ -602,7 +564,6 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
           // shadowGenerator2.getShadowMap().renderList.push(mesh);
           // shadowGenerator3.getShadowMap().renderList.push(mesh);
           // shadowGenerator4.getShadowMap().renderList.push(mesh);
-
         });
 
         var stockage3 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "stockage.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
@@ -687,7 +648,6 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
                 // shadowGenerator2.getShadowMap().renderList.push(mesh);
                 // shadowGenerator3.getShadowMap().renderList.push(mesh);
                 // shadowGenerator4.getShadowMap().renderList.push(mesh);
-
               });
 
       var stockage7 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "stockage.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
@@ -709,7 +669,6 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
             // shadowGenerator2.getShadowMap().renderList.push(mesh);
             // shadowGenerator3.getShadowMap().renderList.push(mesh);
             // shadowGenerator4.getShadowMap().renderList.push(mesh);
-
           });
 
       var stockage8 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "stockage.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
@@ -727,15 +686,11 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
             mesh.info = "je suis une étagère de stockage de la zone de stock";
             mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
 
-
             // shadowGenerator.getShadowMap().renderList.push(mesh);
             // shadowGenerator2.getShadowMap().renderList.push(mesh);
             // shadowGenerator3.getShadowMap().renderList.push(mesh);
             // shadowGenerator4.getShadowMap().renderList.push(mesh);
           });
-
-
-
 
     var chariot1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/", "camion.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
           var mesh = newMeshes[0];
@@ -756,9 +711,7 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
           // shadowGenerator3.getShadowMap().renderList.push(mesh);
           // shadowGenerator4.getShadowMap().renderList.push(mesh);
           setBounce(mesh);
-
         });
-
 
     var chariot2 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/", "camion.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
           var mesh = newMeshes[0];
@@ -927,6 +880,48 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
                 // shadowGenerator4.getShadowMap().renderList.push(mesh);
 
               });
+              var chariot10 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/", "camion.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
+                    var mesh = newMeshes[0];
+                    mesh.material = new BABYLON.StandardMaterial("mat",scene);
+                    mesh.material.diffuseColor = new BABYLON.Color3(1,1,0);
+                    mesh.position.x = 35;
+                    mesh.position.y = 0
+                    mesh.position.z = 115;
+                    mesh.scaling.x = 8;
+                    mesh.scaling.y = 8;
+                    mesh.scaling.z = 8;
+                    mesh.type = "Chariot Elevateur";
+                    mesh.name = "mesh n° : " + Math.random();
+                    mesh.info = "je suis le deuxième chariot élévateur situé dans la zone de stock";
+                    mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
+
+                    // shadowGenerator.getShadowMap().renderList.push(mesh);
+                    // shadowGenerator2.getShadowMap().renderList.push(mesh);
+                    // shadowGenerator3.getShadowMap().renderList.push(mesh);
+                    // shadowGenerator4.getShadowMap().renderList.push(mesh);
+                    mesh.rotate(BABYLON.Axis.Y,245/57,BABYLON.Space.WORLD);
+                  });
+                  var chariot11 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/", "camion.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
+                        var mesh = newMeshes[0];
+                        mesh.material = new BABYLON.StandardMaterial("mat",scene);
+                        mesh.material.diffuseColor = new BABYLON.Color3(1,1,0);
+                        mesh.position.x = 20;
+                        mesh.position.y = 0
+                        mesh.position.z = 115;
+                        mesh.scaling.x = 8;
+                        mesh.scaling.y = 8;
+                        mesh.scaling.z = 8;
+                        mesh.type = "Chariot Elevateur";
+                        mesh.name = "mesh n° : " + Math.random();
+                        mesh.info = "je suis le deuxième chariot élévateur situé dans la zone de stock";
+                        mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
+
+                        // shadowGenerator.getShadowMap().renderList.push(mesh);
+                        // shadowGenerator2.getShadowMap().renderList.push(mesh);
+                        // shadowGenerator3.getShadowMap().renderList.push(mesh);
+                        // shadowGenerator4.getShadowMap().renderList.push(mesh);
+                        mesh.rotate(BABYLON.Axis.Y,245/57,BABYLON.Space.WORLD);
+                      });
   var camera1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/scenes/obj/", "capteurCamera.obj", scene, function(newMeshes) { //import de l'objt 3D .babylon , appel de fonction callBack OnSuccess
              var mesh = newMeshes[0];
              mesh.material = new BABYLON.StandardMaterial("mat",scene);
@@ -947,9 +942,7 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
              // shadowGenerator3.getShadowMap().renderList.push(mesh);
              // shadowGenerator4.getShadowMap().renderList.push(mesh);
              setBounce(mesh);
-
            });
-
 
  BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/test_export/", "remesh.obj", scene, function(newMeshes){
    var mesh = newMeshes[0];
@@ -962,21 +955,15 @@ var stockage1 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/
    mesh.info = "je suis une étagère de stockage située en plein milieu de l'usine";
    mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
    mesh.material.diffuseColor = new BABYLON.Color3(1,1,0.5);
-   // "<div style = 'overflox-x:auto;' id='infotemp'><table><tr><th>"+mesh.type+"</th></tr> <tr> <td> <b>Nom de l'objet :</b> "+mesh.name+"</td></tr><tr><td> <b>id :</b>"+mesh.id+"</td></tr><tr><td><b>Autres infos:</b>"+mesh.info+"</td></tr></table></div>";
-   // "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
-
 
    // shadowGenerator.getShadowMap().renderList.push(mesh);
    // shadowGenerator2.getShadowMap().renderList.push(mesh);
    // shadowGenerator3.getShadowMap().renderList.push(mesh);
    // shadowGenerator4.getShadowMap().renderList.push(mesh);
    setBounce(mesh);
-
  });
 
-
 // PIECE EN BAS A DROITE
-
 var stockage21  = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage2test.obj", scene, function(newMeshes){
   var mesh = newMeshes[0];
    mesh.material = new BABYLON.StandardMaterial("mat",scene);
@@ -1012,7 +999,6 @@ var stockage22 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets
   mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
 });
 
-
 var stockage23 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/test_export/", "remesh.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
   mesh.material = new BABYLON.StandardMaterial("mat",scene);
@@ -1028,7 +1014,6 @@ var stockage23 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets
   mesh.info = "je suis une étagère de stockage située à la place des cuves";
   mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
 });
-
 
 var stockage24 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets/test_export/", "remesh.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
@@ -1061,9 +1046,6 @@ var stockage25 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objets
   mesh.info = "je suis une étagère de stockage située à la place des cuves";
   mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
 });
-
-
-
 
 var stockage31 = BABYLON.SceneLoader.ImportMesh("","/usine3d/FromScratch/objlouis/", "stockage2test.obj", scene, function(newMeshes){
   var mesh = newMeshes[0];
@@ -1117,7 +1099,7 @@ var stockage34 = BABYLON.SceneLoader.ImportMesh("","/usine3d/FromScratch/objloui
   mesh.info = "je suis un beau bureau";
   mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
 });
-var stockage35 = BABYLON.SceneLoader.ImportMesh("","/usine3d/FromScratch/objlouis/", "stockage2.obj", scene, function(newMeshes){
+var stockage35 = BABYLON.SceneLoader.ImportMesh("","/usine3d/FromScratch/objlouis/", "stockage2test.obj", scene, function(newMeshes){
   var mesh = newMeshes[0];
   mesh.scaling.x = 5;
   mesh.scaling.y = 5;
@@ -1174,7 +1156,7 @@ var stockage38 = BABYLON.SceneLoader.ImportMesh("","/usine3d/FromScratch/objloui
 var stockage41 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage3.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
   mesh.material = new BABYLON.StandardMaterial("mat",scene);
-  mesh.material.diffuseColor = new BABYLON.Color3(1,1,0.5);
+  mesh.material.diffuseColor = new BABYLON.Color3(0.8,0.8,0.5);
   mesh.scaling.x = 6;
   mesh.scaling.z = 6;
   mesh.scaling.y = 6;
@@ -1189,6 +1171,8 @@ var stockage41 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
 });
 var stockage42 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage3.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
+  mesh.material = new BABYLON.StandardMaterial("mat",scene);
+  mesh.material.diffuseColor = new BABYLON.Color3(0.8,0.8,0.5);
   mesh.scaling.x = 6;
   mesh.scaling.z = 6;
   mesh.scaling.y = 6;
@@ -1203,6 +1187,8 @@ var stockage42 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
 });
 var stockage43 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage3.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
+  mesh.material = new BABYLON.StandardMaterial("mat",scene);
+  mesh.material.diffuseColor = new BABYLON.Color3(0.8,0.8,0.5);
   mesh.scaling.x = 6;
   mesh.scaling.z = 6;
   mesh.scaling.y = 6;
@@ -1217,6 +1203,8 @@ var stockage43 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
 });
 var stockage44 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage3.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
+  mesh.material = new BABYLON.StandardMaterial("mat",scene);
+  mesh.material.diffuseColor = new BABYLON.Color3(0.8,0.8,0.5);
   mesh.scaling.x = 6;
   mesh.scaling.z = 6;
   mesh.scaling.y = 6;
@@ -1231,6 +1219,8 @@ var stockage44 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
 });
 var stockage45 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage3.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
+  mesh.material = new BABYLON.StandardMaterial("mat",scene);
+  mesh.material.diffuseColor = new BABYLON.Color3(0.8,0.8,0.5);
   mesh.scaling.x = 6;
   mesh.scaling.z = 6;
   mesh.scaling.y = 6;
@@ -1245,6 +1235,8 @@ var stockage45 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
 });
 var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlouis/", "stockage3.obj",scene, function(newMeshes){
   var mesh = newMeshes[0];
+  mesh.material = new BABYLON.StandardMaterial("mat",scene);
+  mesh.material.diffuseColor = new BABYLON.Color3(0.8,0.8,0.5);
   mesh.scaling.x = 6;
   mesh.scaling.z = 6;
   mesh.scaling.y = 6;
@@ -1257,25 +1249,13 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
   mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
 
 });
-//ANIMATION DES MACHINES
-// createFlux(cube3.position,cube4.position);
-
-//createFlux(ligneprod1.position,cube4.position);
-
-
     //////////////////////////////////////////////////////////////////////:
     // GESTION DES PARTICULES   ////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 
-
-
-
-
     /******************************************************************
      * Creation de flux, méthode de la sphère animée entre deux points *
      ******************************************************************/
-
-
 
     function selectionFlux() { // fonction de sélection, on ajoute les éléments dans la liste s'ils n'y sont pas déjà présents
         if (meshesFlux.length < 2) {
@@ -1292,8 +1272,6 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
             }
         }
     }
-
-
     function createFlux(a,b) { // fonction de création de flux, définit l'animation et la lance.
 
         const pSource = a; // le point A est le premier objet de la liste
@@ -1369,7 +1347,6 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
         scene.beginAnimation(sphere, 0, 30, true);
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Gestion des boutons    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1378,11 +1355,22 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
     /** On récupère les éléments qui ont été créés dynamiquement grâce à jquery, dès que le document est chargé. On utilise jquery car
     les éléments ont été insérés via jquery */
     $(document).ready(function() {
+      $("#biblio").hide();
+      $("#formrotation").hide();
+      $(document).on("click","#toggler",function(){
+        $("#biblio").toggle(400);
+        return false;
+      });
+      $(document).on("click","#toggler2",function(){
+        $("#formrotation").toggle(400);
+        return false;
+      });
     $(document).on("click","#checkground",function(){ // choix du plan 2d au sol ou non
       checkGround();
     });
 
-    $("#deleteM").click(function(){
+
+    $(document).on("click","#deleteM",function(){
       var pickResult = scene.pick(scene.pointerX,scene.pointerY);
       if(pickResult.hit && pickResult.pickedMesh != ground){
         selectedMesh.dispose();
@@ -1405,9 +1393,7 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
             })
         }
     });
-
   });
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////      Gestion du sol           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1417,25 +1403,11 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
     var groundMat = new BABYLON.StandardMaterial("groundMat", scene);
     //INSERTION DU PLAN
     groundMat.ambientTexture = new BABYLON.Texture("/usine3D/FromScratch/plan.png", scene);
-
     ground.material = groundMat;
     ground.receiveShadows = false; //affiche les ombres sur le sol
 
-
-
-
 //Affichage du plan ou non
     function checkGround() {
-      // SI ON SE SERT DU CHECKBOX POUR AFFICHER LE PLAN
-        // if ($("#checkground")[0].checked != false) {
-        //     ground.material = new BABYLON.StandardMaterial("material", scene);
-        // }
-        // if ($("#checkground")[0].checked == false) {
-        //     ground.material = groundMat;
-        // }
-
-
-        // SI ON SE SERT DE L'ONGLET DANS LE MENU EN HAUT
         if(masquer == false){
           ground.material = new BABYLON.StandardMaterial("material",scene);
         }
@@ -1521,7 +1493,6 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
    //     canvas.removeEventListener("pointermove", onPointerMove);
    // }
 
-
     // RETOUR DE LA SCENE -  FIN DE LA FONCTION CREATESCENE
     return scene;
 }
@@ -1534,8 +1505,6 @@ engine.runRenderLoop(function() {
     scene1.render(); // refresh de la scene a chaque frame
 });
 
-
-
 canvas.addEventListener("mouseover", function() {
     var body = document.getElementById('body');
     body.style.overflow = "hidden";
@@ -1545,8 +1514,6 @@ canvas.addEventListener("mouseout", function() {
     var body = document.getElementById('body');
     body.style.overflow = "visible";
 })
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     redimension des objets en fonction de la fenetre   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

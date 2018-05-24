@@ -47,9 +47,7 @@
      width : 10%;
      height: 8%;
 }
- #contient {
-     align-content: space-between;
-}
+
  h3{
      color: #586978;
 }
@@ -122,13 +120,43 @@ span{
   width: 250px;
   overflow-y: scroll;
   padding-right: 5px;
+}
+
+#formrotation{
+  border : solid grey 1px;
+  padding: 3px;
 
 }
+#toggler,#toggler2 {
+  color : #fff;
+  background-color: #586978;
+  border : none;
+  /* border-radius: 5px; */
+  margin: 3px;
+  width:auto;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+#toggler:hover , #toggler2:hover{
+  border : solid black 1px;
+  cursor : pointer;
+}
+
+/* #toggler:after , #toggler2:after{
+  content: '\02795';
+}
+
+.active:after {
+  content : '\2212';
+} */
+
 figure > img {
   padding:2px;
   border : solid  #c5cdd3 1px;
   border-radius: 2px;
   margin-top: 2px;
+  cursor : pointer;
 }
 
 figure>img:hover {
@@ -169,8 +197,8 @@ figure>img:hover {
     /* put the nav on the left */
      order: -1;
      margin-left: 1px;
-     padding-left: 5px;
-     padding-right: 5px;
+     padding-left: 3px;
+     padding-right: 3px;
 }
 
   .HolyGrail-ads {
