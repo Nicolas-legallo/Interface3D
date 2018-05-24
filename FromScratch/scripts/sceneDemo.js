@@ -1354,15 +1354,18 @@ var stockage46 = BABYLON.SceneLoader.ImportMesh("", "/usine3d/FromScratch/objlou
     /****** RÉCUPÉRATION DES ÉLÉMENTS INSÉRÉS DANS CONSTRUCTION.JS ***********************/
     /** On récupère les éléments qui ont été créés dynamiquement grâce à jquery, dès que le document est chargé. On utilise jquery car
     les éléments ont été insérés via jquery */
+
     $(document).ready(function() {
-      $("#biblio").hide();
-      $("#formrotation").hide();
+      // $("#formrotation").hide();
+      // $("#biblio").hide();
       $(document).on("click","#toggler",function(){
         $("#biblio").toggle(400);
+        $("#flechebibli").toggleClass("toggledown");
         return false;
       });
       $(document).on("click","#toggler2",function(){
         $("#formrotation").toggle(400);
+        $("#flecherot").toggleClass("toggledown");
         return false;
       });
     $(document).on("click","#checkground",function(){ // choix du plan 2d au sol ou non

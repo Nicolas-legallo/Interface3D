@@ -8,7 +8,7 @@
       overflow-x: hidden;
 }
  body {
-     background-color: #F1F1F1;
+     background-color:  #e1e5e7;
      color: #586978;
 }
 
@@ -111,9 +111,8 @@ span{
 }
 
 #biblio {
-  border : solid grey 1px;
   background-color: #fff;
-  display:flex;
+  display : flex;
   flex-flow: row wrap ;
   justify-content: space-around;
   height: 400px;
@@ -123,7 +122,6 @@ span{
 }
 
 #formrotation{
-  border : solid grey 1px;
   padding: 3px;
 
 }
@@ -143,14 +141,31 @@ span{
   cursor : pointer;
 }
 
-/* #toggler:after , #toggler2:after{
-  content: '\02795';
+/* #toggler::after , #toggler2::after{
+  content: '^';
+} */
+#flechebibli, #flecherot {
+  /* -webkit-transform: rotate(90deg);
+   -moz-transform: rotate(90deg);
+   -ms-transform: rotate(90deg);
+   -o-transform: rotate(90deg);
+   transform: rotate(90deg); */
 }
 
-.active:after {
-  content : '\2212';
-} */
-
+.toggleup {
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+.toggledown {
+  -webkit-transform: rotate(180deg);
+   -moz-transform: rotate(180deg);
+   -ms-transform: rotate(180deg);
+   -o-transform: rotate(180deg);
+   transform: rotate(180deg);
+}
 figure > img {
   padding:2px;
   border : solid  #c5cdd3 1px;
