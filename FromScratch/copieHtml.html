@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Supervision - Copilote</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+</head>
+
+<body id="body" class="HolyGrail">
+    <header>
+        <link rel="stylesheet" type="text/css" href="style.css" media="all">
+        <!-- Link to the last version of BabylonJS -->
+        <link rel="stylesheet" href=".\bootstrap\css\bootstrap.css">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
+
+        <script style="text/javascript" src="babylon.custom.js" defer></script>
+        <script style="text/javascript" src="babylon.max.js" defer></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js" defer></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script style="text/javascript" src="babylon.objFileLoader.js" defer></script>
+        <script style="text/javascript" src="chart.js" defer></script>
+        <script style="text/javascript" src="scene.js" defer></script>
+
+        <h1> <a href="http://www.infologic-copilote.fr/"> <img id="logo" src="objets/infologic_engineering.jpg" ></a> Copilote - Supervision 3D </h1>
+    </header>
+    <div class="HolyGrail-body">
+        <main class="HolyGrail-content">
+            <canvas id="renderCanvas"></canvas>
+        </main>
+        <div id=buttons class="HolyGrail-nav">
+            <form method="post" id="contient">
+                <h3 id="titreform">Paramètres globaux : </h3>
+                <div id="container">
+                    <div id="scaling">
+                        <h5> Modif Taille : </h5>
+                        <input type="number" name="scalingX" id="scalingX">Modifier Taille X</input>
+                        <input type="number" name="scalingY" id="scalingY">Modifier Taille Y</input>
+                        <input type="number" name="scalingZ" id="scalingZ">Modifier Taille Z</input> <br>
+                        <input type="button" id="validscaling" value="valider"></input>
+                    </div>
+                    <br>
+                    <div id="rotation">
+                        <h5> Rotation : </h5>
+                        <input type="number" step="any" max="1" name="rotationX" id="rotationX"> Rotation par les X</input>
+                        <input type="number" step="any" max="1" name="rotationY" id="rotationY"> Rotation par les Y</input>
+                        <input type="number" step="any" max="1" name="rotationZ" id="rotationZ"> Rotation par les Z</input>
+                        <br>
+                        <input type="button" id="validrot" value="valider">
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+        <aside id="aside" class="HolyGrail-ads">
+            <h3 id="titrboutons"> Fonctions globales : </h3>
+            <input type="checkbox" id="checkground">
+            <label for="checkground">Masquer le plan</label>
+            <h3 id="infosmesh"> Informations de l'objet: </h3>
+            <div id="infotemp"></div>
+            <canvas id="graphcanvas"> </canvas>
+        </aside>
+    </div>
+
+    <!-- <footer>
+      <h1> <a href="http://www.infologic-copilote.fr/"> <img id="logo" src="objets/infologic_engineering.jpg" ></a> Footer</hi>
+
+    </footer> -->
+</body>
+
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+
+<head>
+    <title>Supervision - Copilote</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+</head>
+
+<body id="body" class="HolyGrail">
+    <header>
+        <link rel="stylesheet" type="text/css" href="style.css" media="all">
+        <!-- Link to the last version of BabylonJS -->
+        <!-- <link rel="stylesheet" href=".\bootstrap\css\bootstrap.css">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
+<!--
+        <script style="text/javascript" src="scripts/babylon.custom.js" defer ></script>
+        <script style="text/javascript" src="scripts/babylon.max.js"  defer></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer ></script>
+        <!-- <script style="text/javascript" src="scripts/construction.js"  defer></script> -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"  defer></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous" defer></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous" defer></script>
+        <script style="text/javascript" src="scripts/babylon.objFileLoader.js"  defer ></script> -->
+        <!-- <script style="text/javascript" src="scripts/scene.js" defer ></script> -->
+        <!-- <script style="text/javascript" src="scripts/copieScene.js" defer ></script> -->
+
+
+
+
+        <!-- <h1> <a href="http://www.infologic-copilote.fr/"> <img id="logo" src="objets/infologic_engineering.jpg" ></a> Copilote - Supervision 3D </h1>
+    </header>
+    <div class='HolyGrail-body' id="insererici">
+    <main class='HolyGrail-content'><canvas id='renderCanvas'></canvas></main>
+    </div>
+
+
+
+</body>
+
+</html>-->

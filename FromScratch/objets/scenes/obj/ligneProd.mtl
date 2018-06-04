@@ -1,0 +1,12 @@
+# Blender MTL File: 'recup objets.blend'
+# Material Count: 1
+
+newmtl batiment.038
+Ns 96.078431
+Ka 0.119617 0.119617 0.119617
+Kd 0.601793 0.604120 0.564199
+Ks 0.418461 0.500000 0.438054
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3

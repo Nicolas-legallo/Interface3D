@@ -1,0 +1,193 @@
+
+[
+   {
+      "nom":"objet1",
+      "chemin":"/usine3d/FromScratch/objets/scenes/obj/",
+      "nomrelatif":"ligneProd.obj",
+      "position":{
+         "x":"70",
+         "y":"0",
+         "z":"-85"
+      },
+      "scaling":{
+         "x":"4",
+         "y":"4",
+         "z":"4"
+      },
+      "type":"Ligne de Production",
+      "info":"Je suis une ligne de prod, et un essai du format Json",
+      "etat":"Normal"
+   },
+   {
+      "nom":"objet2",
+      "chemin":"/usine3d/FromScratch/objets/scenes/obj/",
+      "nomrelatif":"ligneProd.obj",
+      "position":{
+         "x":"85",
+         "y":"0",
+         "z":"-85"
+      },
+      "scaling":{
+         "x":"4",
+         "y":"4",
+         "z":"4"
+      },
+      "type":"Ligne de Production",
+      "info":"Je suis une ligne de prod, et le deuxieme essai du format Json",
+      "etat":"Normal"
+   },
+   {
+      "nom":"objet3",
+      "chemin":"/usine3d/FromScratch/objets/scenes/obj/",
+      "nomrelatif":"capteurCamera.obj",
+      "position":{
+         "x":"85",
+         "y":"0",
+         "z":"-60"
+      },
+      "scaling":{
+         "x":"8",
+         "y":"8",
+         "z":"8"
+      },
+      "type":"Ligne de Production",
+      "info":"Je suis une ligne de prod, et le deuxieme essai du format Json",
+      "etat":"Normal"
+   },
+   {
+      "name":"Ligne production A",
+      "data":[
+         {
+            "key":"path",
+            "value":"/usine3d/FromScratch/objets/scenes/obj/",
+            "unit":"ligneProd.obj"
+         },
+         {
+            "key":"actuelSpeed",
+            "value":"120.6",
+            "unit":"pces/h"
+         },
+         {
+            "key":"igniter",
+            "value":"1",
+            "unit":[
+               "off",
+               "on"
+            ]
+         },
+         {
+            "key":"of",
+            "value":"OF123F574"
+         },
+         {
+            "key":"state",
+            "value":"3",
+            "unit":[
+               "hors tension",
+               "sous tension",
+               "dérive",
+               "défaut",
+               "attente initialisation",
+               "attente départ cycle",
+               "initialisation en cours",
+               "cycle en cours",
+               "fin de cycle en cours"
+            ]
+         },
+         {
+            "position":{
+               "x":"125",
+               "y":"0",
+               "z":"30"
+            },
+            "scaling":{
+               "x":"4",
+               "y":"4",
+               "z":"4"
+            }
+         }
+      ]
+   },
+   {
+      "name":"Balance sortie ligne B",
+      "data":[
+         {
+            "key":"actualWeight",
+            "value":"12.621",
+            "unit":"g"
+         },
+         {
+            "key":"tare",
+            "value":"1",
+            "unit":[
+               "non",
+               "oui"
+            ]
+         },
+         {
+            "key":"stable",
+            "value":"0",
+            "unit":[
+               "non",
+               "oui"
+            ]
+         }
+      ]
+   },
+   {
+      "name":"stockage1",
+      "data":[
+         {
+            "key":"capacité",
+            "value":"150",
+            "unit":"m3"
+         },
+         {
+            "key":"path",
+            "value":"/usine3d/FromScratch/objets/scenes/obj/",
+            "unit":"stockage.obj"
+         },
+         {
+            "position":{
+               "x":"35",
+               "y":"0",
+               "z":"-15"
+            },
+            "scaling":{
+               "x":"5",
+               "y":"5",
+               "z":"5"
+            }
+         }
+      ]
+   },
+
+   {
+     "name" : "stockage2",
+     "data" : [
+       {
+            "key":"capacité",
+            "value":"150",
+            "unit":"m3"
+       },
+       {
+         "key":"path",
+         "value":"/usine3d/FromScratch/objets/scenes/obj/",
+         "unit":"stockage.obj"
+       },
+       {
+          "position":{
+             "x":"35",
+             "y":"0",
+             "z":"-15"
+          },
+          "scaling":{
+             "x":"5",
+             "y":"5",
+             "z":"5"
+          }
+
+   }]
+}
+
+]
