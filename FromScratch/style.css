@@ -73,6 +73,22 @@
 
 
 }
+#divcurrentmode{
+  display :flex;
+  text-align: center;
+  padding-top : 13px;
+  position : relative;
+  float: right;
+}
+
+#currentmode{
+  color : white;
+  background-color : #586978;
+  margin-bottom: 0px;
+  height : 20px;
+  float : right;
+  display:flex;
+}
 
 /*/
 //////////////////////////////

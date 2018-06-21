@@ -10,6 +10,7 @@ var engine = new BABYLON.Engine(canvas, true);
 var selectedMesh;
 var bounce = false;
 var masquer = false;
+var imported = false; //permet de vérifier si on a déjà des objets importés du json sur la scène
 engine.enableOfflineSupport = false;
 
 
@@ -56,30 +57,19 @@ var createScene = function() {
 
     var light = new BABYLON.PointLight("pointlight", new BABYLON.Vector3(-350, 500, 250), scene);
     light.specular = new BABYLON.Color3(0, 0, 0);
-    light.intensity = 0, 4;
+    light.intensity = 0.6;
 
     var light2 = new BABYLON.PointLight("pointlight2", new BABYLON.Vector3(350, 500, -250), scene);
     light2.specular = new BABYLON.Color3(0, 0, 0);
-    light2.intensity = 0.4;
+    light2.intensity = 0.3;
 
-    var light3 = new BABYLON.PointLight("pointlight3", new BABYLON.Vector3(350, 500, 250), scene);
-    light3.specular = new BABYLON.Color3(0, 0, 0);
-    light3.intensity = 0.4;
-
-    var light4 = new BABYLON.PointLight("pointlight4", new BABYLON.Vector3(-350, 500, -250), scene);
-    light4.specular = new BABYLON.Color3(0, 0, 0);
-    light4.intensity = 0.4;
-
-    // var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:10000.0}, scene);
-    // var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-    // skyboxMaterial.backFaceCulling = false;
-    // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("sky/skybox", scene);
-    // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-    // skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    // skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    // skyboxMaterial.disableLighting = true;
-    // skybox.material = skyboxMaterial;
-
+    // var light3 = new BABYLON.PointLight("pointlight3", new BABYLON.Vector3(350, 500, 250), scene);
+    // light3.specular = new BABYLON.Color3(0, 0, 0);
+    // light3.intensity = 0.3;
+    //
+    // var light4 = new BABYLON.PointLight("pointlight4", new BABYLON.Vector3(-350, 500, -250), scene);
+    // light4.specular = new BABYLON.Color3(0, 0, 0);
+    // light4.intensity = 0.3;
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,25 +80,6 @@ var createScene = function() {
     shadowGenerator.useBlurExponentialShadowMap = true;
     shadowGenerator.useContactHardeningShadow = true;
     shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
-
-    var shadowGenerator2 = new BABYLON.ShadowGenerator(512, light2);
-    shadowGenerator.usePoissonSampling = true;
-    shadowGenerator.useBlurExponentialShadowMap = true;
-    shadowGenerator.useContactHardeningShadow = true;
-    shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
-
-    var shadowGenerator3 = new BABYLON.ShadowGenerator(512, light3);
-    shadowGenerator.usePoissonSampling = true;
-    shadowGenerator.useBlurExponentialShadowMap = true;
-    shadowGenerator.useContactHardeningShadow = true;
-    shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
-
-    var shadowGenerator4 = new BABYLON.ShadowGenerator(512, light4);
-    shadowGenerator.usePoissonSampling = true;
-    shadowGenerator.useBlurExponentialShadowMap = true;
-    shadowGenerator.useContactHardeningShadow = true;
-    shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
-
 
 
 
@@ -126,11 +97,9 @@ var createScene = function() {
             scaleX = selectedMesh.scaling.x;
             scaleZ = selectedMesh.scaling.z;
             scaleY = selectedMesh.scaling.y;
-            $("#scalingX").val(scaleX);
+            $("#scalingX").val(scaleX); //on affiche la taille de l'objet sélectionné dans le formulaire de modification de taille
             $("#scalingY").val(scaleY);
             $("#scalingZ").val(scaleZ);
-            particleSystem.emitter = selectedMesh; // the starting object, the emitter (ref GESTION DES PARTICULES)
-
         }
     });
 
@@ -142,75 +111,55 @@ var createScene = function() {
         selectedMesh.scaling.y = yy;
         selectedMesh.scaling.z = zz;
 
-
-        for (var i = selectedMesh.actionManager.actions.length - 1; i > 0; i--) {
-            selectedMesh.actionManager.actions.splice(i, 1); //on parcourt toutes les actions attribuées à l'objet et on les supprime toutes pour éviter des problèmes de concurrence et de redondance
-        }
-        //On réattribue  les propriétés graphiques (surtout celle d'agrandissement au survol qui subit une modification pour s'adapter à la nouvelle taille de l'objet)
-        selectedMesh.actionManager.registerAction(new BABYLON.SetValueAction(
-            BABYLON.ActionManager.OnPointerOutTrigger, selectedMesh.material, "emissiveColor", selectedMesh.material.emissiveColor)); //Attribut emissive color : valeur de bse lorsque la souris n'est pas sur le mesh
-        selectedMesh.actionManager.registerAction(new BABYLON.SetValueAction(
-            BABYLON.ActionManager.OnPointerOverTrigger, selectedMesh.material, "emissiveColor", BABYLON.Color3.White())); // Attribut emissive color :  blanche lorsque la souris est sur le mesh
-        selectedMesh.actionManager.registerAction(new BABYLON.SetValueAction(
-            BABYLON.ActionManager.OnPointerOutTrigger, selectedMesh, "scaling", new BABYLON.Vector3(selectedMesh.scaling.x, selectedMesh.scaling.y, selectedMesh.scaling.z))); //Scaling : scaling de base lorsque la souris n'est pas sur le mesh
-        selectedMesh.actionManager.registerAction(new BABYLON.SetValueAction(
-            BABYLON.ActionManager.OnPointerOverTrigger, selectedMesh, "scaling", new BABYLON.Vector3(selectedMesh.scaling.x * 1.1, selectedMesh.scaling.y * 1.1, selectedMesh.scaling.z * 1.1))); //Scaling : scaling de base légèrement augmenté lorsque la souris est sur le mesh
-
-        selectedMesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPickTrigger, light, "diffuse", BABYLON.Color3.White(), 1)) // ne sert à priori à rien mais ça marche bien ^^
-            .then(new BABYLON.CombineAction(BABYLON.ActionManager.NothingTrigger, [ // Then is used to add a child action used alternatively with the root action.
-                new BABYLON.SetValueAction(BABYLON.ActionManager.NothingTrigger, selectedMesh.material, "wireframe", false)
-            ]));
-        selectedMesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPickTrigger, selectedMesh.material, "wireframe", true)).then(new BABYLON.DoNothingAction()); //lorsque on clique sur le mesh, affiche son """squelette""", puis revient à la normale lorsqu'on reclique
-
         shadowGenerator.getShadowMap().renderList.push(selectedMesh); //ajoute l'objet à la liste des objets produisant des ombresss
-        shadowGenerator2.getShadowMap().renderList.push(selectedMesh);
-        shadowGenerator3.getShadowMap().renderList.push(selectedMesh);
-        shadowGenerator4.getShadowMap().renderList.push(selectedMesh);
+        // shadowGenerator2.getShadowMap().renderList.push(selectedMesh);
+        // shadowGenerator3.getShadowMap().renderList.push(selectedMesh);
+        // shadowGenerator4.getShadowMap().renderList.push(selectedMesh);
 
     }
 
     // fonction qui modifie la rotation de l'objet sélectionné, on gère toutes les valeurs du formulaire possibles
     function modifyRotation(xx, yy, zz) {
 
-        if (xx != 0 && yy == 0 && zz == 0) {
-            selectedMesh.rotate(BABYLON.Axis.X, xx / 57, BABYLON.Space.WORLD); //Fonction de rotation de babylon, le premier paramètre est l'axe de roation,
+        if (xx != 0 && yy == 0 && zz == 0) { //si on fait rotate en X
+            selectedMesh.rotate(BABYLON.Axis.X, xx / 57.29, BABYLON.Space.WORLD); //Fonction de rotation de babylon, le premier paramètre est l'axe de roation,
             //le deuxième est l'angle en radian (donc on divise la valeur en paramètre par 57 car elle est rentrée en degrés)
             //et le troisième est le référentiel de rotation ( local ou global)
         }
-        if (xx == 0 && yy != 0 && zz == 0) {
-            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57, BABYLON.Space.WORLD);
+        if (xx == 0 && yy != 0 && zz == 0) { // rotate en Y
+            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57.29, BABYLON.Space.WORLD);
         }
 
-        if (xx == 0 && yy == 0 && zz != 0) {
-            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57, BABYLON.Space.WORLD);
+        if (xx == 0 && yy == 0 && zz != 0) { //rotate en Z
+            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57.29, BABYLON.Space.WORLD);
         }
 
-        if (xx != 0 && yy != 0 && zz == 0) {
-            selectedMesh.rotate(BABYLON.Axis.X, xx / 57, BABYLON.Space.WORLD);
-            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57, BABYLON.Space.WORLD);
+        if (xx != 0 && yy != 0 && zz == 0) { // rotate en X et en Y
+            selectedMesh.rotate(BABYLON.Axis.X, xx / 57.29, BABYLON.Space.WORLD);
+            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57.29, BABYLON.Space.WORLD);
         }
 
-        if (xx != 0 && yy == 0 && zz != 0) {
-            selectedMesh.rotate(BABYLON.Axis.X, xx / 57, BABYLON.Space.WORLD);
-            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57, BABYLON.Space.WORLD);
+        if (xx != 0 && yy == 0 && zz != 0) { //rotate en X et en Z
+            selectedMesh.rotate(BABYLON.Axis.X, xx / 57.29, BABYLON.Space.WORLD);
+            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57.29, BABYLON.Space.WORLD);
         }
 
-        if (xx == 0 && yy != 0 && zz != 0) {
-            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57, BABYLON.Space.WORLD);
-            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57, BABYLON.Space.WORLD);
+        if (xx == 0 && yy != 0 && zz != 0) { //rotate en Y et en Z
+            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57.29, BABYLON.Space.WORLD);
+            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57.29, BABYLON.Space.WORLD);
         }
 
-        if (xx != 0 && yy != 0 && zz != 0) {
-            selectedMesh.rotate(BABYLON.Axis.X, xx / 57, BABYLON.Space.WORLD);
-            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57, BABYLON.Space.WORLD);
-            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57, BABYLON.Space.WORLD);
+        if (xx != 0 && yy != 0 && zz != 0) { //rotate en X Y et Z
+            selectedMesh.rotate(BABYLON.Axis.X, xx / 57.29, BABYLON.Space.WORLD);
+            selectedMesh.rotate(BABYLON.Axis.Y, yy / 57.29, BABYLON.Space.WORLD);
+            selectedMesh.rotate(BABYLON.Axis.Z, zz / 57.29, BABYLON.Space.WORLD);
         }
     }
 
     //fonction qui supprime l'objet sélectionné
     function deleteMesh() {
-        if (selectedMesh != ground) {
-            selectedMesh.dispose();
+        if (selectedMesh != ground) { // le sol est considéré comme un mesh par BABYLON, mais on ne veut pas qu'il puisse être supprimé.
+            selectedMesh.dispose(); //fonction de suppression de mesh de BABYLON
         }
     }
 
@@ -223,15 +172,6 @@ var createScene = function() {
         selectedmeshes.length = 0; //réinitialise le tableau en le vidant.
         here = false; //on réinitialisé la valeur de here
         canvas.addEventListener("dblclick", selection); //chaque doubleclick lance la fontion selection()
-
-        joinNow.addEventListener("click", function() { // lorsqu'on clique sur le bouton "join" :
-            canvas.removeEventListener("dblclick", selection); // - on enlève l'écouteur de doubleclick
-            joinNow.style.display = "none"; // - on fait disparaître le bouton "join"
-            joinM(selectedmeshes[0], 1); // - puis on appelle la fonction récursive
-        });
-
-
-
     }
 
     //Fonction appelée à chaque dblclick qui ajoute le mesh selectionné à la liste des mesh s'il n'y est pas déjà présent
@@ -249,18 +189,6 @@ var createScene = function() {
 
 
 
-    //ESSAI DE FONCTION RECURSIVE QUI NE MARCHE PAS
-
-
-    function joinM(obj, j) { //fonction recursive qui parcourt le tableau des mesh selectionnés, et les lie entre-eux par fusion (merge);
-
-        if (j >= selectedmeshes.length - 1) { // cas de base, on merge l'objet pointé avec celui qui le précède
-            return Obj;
-        } else { //si on n'est pas dans le cas de base alors on appelle la fonction
-            return joinM(new BABYLON.Mesh.MergeMeshes(obj, selectedmeshes[j], true), j + 1);
-
-        }
-    }
 
     // Fonction qui fait "rebondir" l'objet sélectionné via une animation BabylonJS
     function setBounce() {
@@ -298,38 +226,64 @@ var createScene = function() {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // Import du json //
-    var treeData;
+    /************************* IMPORT DU JSON  ***********************************************************************************************************************************/
+    function LoadJson(){
+      var objet;
 
-    var oReq = new XMLHttpRequest();
-    oReq.open("GET", "scripts/data.json");
-    oReq.responseType ='json';
-    oReq.send();
+      var requete = new XMLHttpRequest(); //on adresse une requete XML Http pour récuperer le json
+      requete.open("GET","scripts/objets.json"); /* cette requete utilisera la méthode GET, et devra aller à l'adresse scripts/objets.json
+                                                (ici on est dans des fichiers, mais ça aurait pu être un url) */
 
-    oReq.onload = function(){ //tests de récupération des données du json
-      treeData = oReq.response;
-      console.log(treeData);
-      console.log(treeData[0].chemin);
-      console.log(treeData[0].nom);
-      console.log(treeData[1].nom);
-      console.log(treeData[3]['data'][1]['value']);
+      requete.responseType ='json'; //on indique que le type de la réponse qui sera faite à la requête est JSON
+      requete.send(); //envoie de la requête
 
+      requete.onload = function(){ // tous les éléments liés à la requête ou sa réponse doivent se situer dans cette fonction, qui se déclenche quand la requête est envoyée
+
+        objet = requete.response; // la variable objet contient toute la structure de notre fichier JSON
+        var i;
+
+        function addMeshJson(o) { /*Fonction qui permet d'appeler la fonction d'import, en lui fournissant un paramètre supplémentaire :
+                                Un objet duquel on va récupérer tous les attributs à appliquer au nouvel objet sur la scène */
+          BABYLON.SceneLoader.ImportMesh("", o.chemin, o.nomrelatif, scene, function(newMeshes) { //import de l'objet 3D , appel de fonction callBack OnSuccess
+
+            var mesh = newMeshes[0]; //mesh prend la valeur du nouvel objet qu'on vient d'importer sur la scène
+            mesh.material = new BABYLON.StandardMaterial("mate",scene); //on attribue un Material à cet objet
+            mesh.material.diffuseColor = new BABYLON.Color3(Number(o.couleur.r),Number(o.couleur.g),Number(o.couleur.b)); // ce qui nous permet de lui ajouter une couleur, ici bleue
+            mesh.type = o.type; // le type du nouvel objet devient le type de l'objet Json correspondant
+            mesh.name = o.nom; // pareil pour son nom
+            mesh.id = o.nom;
+            mesh.etat = o.etat; // et son état
+            mesh.position.x = Number(o.position.x); //ici on caste la position en tant que nombre, sinon il l'inteprète en tant que string
+            mesh.position.y = Number(o.position.y);
+            mesh.position.z = Number(o.position.z);
+            mesh.scaling.x = Number(o.scaling.x);
+            mesh.scaling.y = Number(o.scaling.y);
+            mesh.scaling.z = Number(o.scaling.z);
+            // mesh.rotate(o.rotation.axis,eval(o.rotation.value),BABYLON.Space.WORLD);
+             console.log(o.rotation.axis);
+             console.log(eval(o.rotation.value));
+            mesh.info = o.info;
+            //mesh.informations est le paneau d'informations lié à chaque objet s'affichant via le clic droit.
+            mesh.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>"+mesh.type+"</p><p id='texteinfo'> <span> Nom </span>"+mesh.name+"<br> <span> Id </span>"+mesh.id+"<br> <span> Infos générales </span>"+mesh.info+"</p></div>";
+            mesh.pointflux = new BABYLON.Vector3(); // le point de flux de l'objet correspond au point idéal pour faire partir ou arriver un flux ( d'un pdv logique et esthétique)
+            mesh.pointflux.x = Number(o.pointflux.x);
+            mesh.pointflux.y = Number(o.pointflux.y);
+            mesh.pointflux.z = Number(o.pointflux.z);
+            mesh.cube = "";
+        });
+      } // Fin de la fonction d'ajout de nouvel objet
+
+        for(i = 0; i<objet.length; i++){ //Ici, on parcourt le fichier JSON dans son intégralité
+           addMeshJson(objet[i]); // et pour chaque objet du JSON on crée un nouvel objet sur la scène ayant les même attributs
+      }
+    }
     }
 
-
-    var boxx = BABYLON.Mesh.CreateBox('box', 10, scene);
-    boxx.material = new BABYLON.StandardMaterial("mat", scene);
-    boxx.material.emissiveColor = new BABYLON.Color3(1, 0, 0);
-
-    boxx.actionManager = new BABYLON.ActionManager(scene);
-    boxx.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, boxx.material, "emissiveColor", boxx.material.emissiveColor));
-    boxx.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, boxx.material, "emissiveColor", BABYLON.Color3.White()));
 
     //Fonction qui crée des cubes
     function addBox() {
 
         var box = BABYLON.Mesh.CreateBox('box', 10, scene);
-        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(box, 1024, 1024, false);
         box.type = "box";
         box.name = "box n° " + Math.random();
         box.info = "je suis un cube généré via babylon";
@@ -339,6 +293,11 @@ var createScene = function() {
             5, //la position en Y doit être égale à la moitié de la taille de l'objet si on veut que celui-ci soit posé sur le sol
             Math.random() * 100,
         );
+        box.pointflux = new BABYLON.Vector3(
+          box.position.x,
+          box.position.y,
+          box.position.Z
+        )
 
         // On attribue des propriétés graphiques à l'objet créé
         box.material = new BABYLON.StandardMaterial("mat", scene);
@@ -347,28 +306,14 @@ var createScene = function() {
         box.actionManager = new BABYLON.ActionManager(scene);
         box.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, box.material, "emissiveColor", box.material.emissiveColor));
         box.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, box.material, "emissiveColor", BABYLON.Color3.White()));
-        box.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, box, "scaling", new BABYLON.Vector3(box.scaling.x, box.scaling.y, box.scaling.z), 150));
-        box.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, box, "scaling", new BABYLON.Vector3(box.scaling.x + box.scaling.x * 0.1, box.scaling.y + box.scaling.y * 0.1, box.scaling.z + box.scaling.z * 0.1), 150));
-
-
-        box.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPickTrigger, light, "diffuse", BABYLON.Color3.White(), 1))
-            .then(new BABYLON.CombineAction(BABYLON.ActionManager.NothingTrigger, [ // Then is used to add a child action used alternatively with the root action.
-                new BABYLON.SetValueAction(BABYLON.ActionManager.NothingTrigger, box.material, "wireframe", false)
-            ]));
-        box.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPickTrigger, box.material, "wireframe", true)).then(new BABYLON.DoNothingAction());
-
-
         shadowGenerator.getShadowMap().renderList.push(box); //ajoute l'objet à la liste des objets produisant des ombresss
-        shadowGenerator2.getShadowMap().renderList.push(box);
-        shadowGenerator3.getShadowMap().renderList.push(box);
-        shadowGenerator4.getShadowMap().renderList.push(box);
-
-
     }
+
+
 
     var count;
 
-    // Fonction qui crée un rectangle entre 2 points sélectionnés.
+    // Fonction qui crée un rectangle entre 2 points sélectionnés (un mur).
     function addWall() {
         count = 0;
         var box;
@@ -378,10 +323,10 @@ var createScene = function() {
 
     function wall() {
         var pickResult = scene.pick(scene.pointerX, scene.pointerY);
-        // if (!pickResult.hit) {
-        //   return;
-        // }
-        if (count) {
+        if (!pickResult.hit) {
+          return;
+        }
+        if (count) { //si on a déjà cliqué une fois alors on va étendre le mur vers le deuxième clic et lui attribuer des propriétés
             // Atrribution des propriétés graphiques
             var material = new BABYLON.StandardMaterial("matbox", scene);
             box.material = material;
@@ -389,18 +334,12 @@ var createScene = function() {
             box.actionManager = new BABYLON.ActionManager(scene);
             box.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, box.material, "emissiveColor", box.material.emissiveColor));
             box.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, box.material, "emissiveColor", BABYLON.Color3.Red()));
-
-
-            box.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPickTrigger, light, "diffuse", BABYLON.Color3.White(), 1))
-                .then(new BABYLON.CombineAction(BABYLON.ActionManager.NothingTrigger, [ // Then is used to add a child action used alternatively with the root action.
-                    new BABYLON.SetValueAction(BABYLON.ActionManager.NothingTrigger, box.material, "wireframe", false)
-                ]));
-            box.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPickTrigger, box.material, "wireframe", true)).then(new BABYLON.DoNothingAction());
+            box.pointflux =  new BABYLON.Vector3(
+              box.position.x,
+              box.position.y,
+              box.position.z
+            );
             shadowGenerator.getShadowMap().renderList.push(box); //ajoute l'objet à la liste des objets produisant des ombresss
-            shadowGenerator2.getShadowMap().renderList.push(box);
-            shadowGenerator3.getShadowMap().renderList.push(box);
-            shadowGenerator4.getShadowMap().renderList.push(box);
-
             //Orientation et redimension du mur
             console.log('second click!');
             var pos = pickResult.pickedPoint.clone();
@@ -414,7 +353,7 @@ var createScene = function() {
             box.scaling.z = 5;
             count = 0;
             canvas.removeEventListener("click", wall);
-        } else {
+        } else { // si c'est le premier clic alos on crée seulement un cube minuscule en attente d'être étiré vers le deuxième point.
             // création du point de départ au premier clic
             console.log('first click!');
             box = BABYLON.Mesh.CreateBox("box", 1, scene);
@@ -426,95 +365,9 @@ var createScene = function() {
     }
 
 
-    // Fonction qui crée des sphères
-    function addSphere() {
-        var sphere = BABYLON.Mesh.CreateSphere('sphere', 16, 6, scene);
-        sphere.type = "sphere";
-        sphere.name = "sphere n° : " + Math.random();
-        sphere.info = "je suis une sphère générée via babylon";
-        sphere.informations = "<div style='overflow-x:auto;' id='infotemp'><p id='titleinfo'>" + sphere.type + "</p><p id='texteinfo'> <span> Nom </span>" + sphere.name + "<br> <span> Id </span>" + sphere.id + "<br> <span> Infos générales </span>" + sphere.info + "</p></div>";
-        sphere.position = new BABYLON.Vector3(
-            Math.random() * 100 * -1,
-            3,
-            Math.random() * 100,
-        );
-
-        // On attribue des propriétés graphiques à l'objet créé
-
-        sphere.material = new BABYLON.StandardMaterial("mat", scene);
-        sphere.material.emissiveColor = new BABYLON.Color3(0, 0, 1);
-
-        sphere.actionManager = new BABYLON.ActionManager(scene);
-        sphere.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, sphere.material, "emissiveColor", sphere.material.emissiveColor));
-        sphere.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, sphere.material, "emissiveColor", BABYLON.Color3.White()));
-        sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, sphere, "scaling", new BABYLON.Vector3(sphere.scaling.x, sphere.scaling.y, sphere.scaling.z), 150));
-        sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, sphere, "scaling", new BABYLON.Vector3(sphere.scaling.x + sphere.scaling.x * 0.1, sphere.scaling.y + sphere.scaling.y * 0.1, sphere.scaling.z + sphere.scaling.z * 0.1), 150));
-
-        sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPickTrigger, light, "diffuse", BABYLON.Color3.White(), 1))
-            .then(new BABYLON.CombineAction(BABYLON.ActionManager.NothingTrigger, [ // Then is used to add a child action used alternatively with the root action.
-                new BABYLON.SetValueAction(BABYLON.ActionManager.NothingTrigger, sphere.material, "wireframe", false)
-            ]));
-        sphere.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPickTrigger, sphere.material, "wireframe", true)).then(new BABYLON.DoNothingAction());
-
-        shadowGenerator.getShadowMap().renderList.push(sphere); //ajoute l'objet à la liste des objets produisant des ombresss
-        shadowGenerator2.getShadowMap().renderList.push(sphere);
-        shadowGenerator3.getShadowMap().renderList.push(sphere);
-        shadowGenerator4.getShadowMap().renderList.push(sphere);
-
-    }
-
-
-
-
     //////////////////////////////////////////////////////////////////////:
     // GESTION DES PARTICULES   ////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-
-    // Create a particle system
-    var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
-
-    //Texture of each particle
-    particleSystem.particleTexture = new BABYLON.Texture("/usine3D/FromScratch/textures/flares.png", scene);
-
-    // Where the particles come from
-    particleSystem.minEmitBox = new BABYLON.Vector3(1, 0, 0); // Starting all from
-    particleSystem.maxEmitBox = new BABYLON.Vector3(1, 0, 0); // To...
-
-    // Colors of all particles
-    particleSystem.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
-    particleSystem.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
-    particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);
-
-    // Size of each particle (random between...
-    particleSystem.minSize = 0.3;
-    particleSystem.maxSize = 0.8;
-
-    // Life time of each particle (random between...
-    particleSystem.minLifeTime = 0.2;
-    particleSystem.maxLifeTime = 0.7;
-
-    // Emission rate
-    particleSystem.emitRate = 3000;
-
-    // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
-    particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-
-    // Set the gravity of all particles
-    particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
-
-    // Direction of each particle after it has been emitted
-    particleSystem.direction1 = new BABYLON.Vector3(0, 0, 0);
-    particleSystem.direction2 = new BABYLON.Vector3(0, 0, 0);
-
-    // Angular speed, in radians
-    particleSystem.minAngularSpeed = 0;
-    particleSystem.maxAngularSpeed = Math.PI;
-
-    // Speed
-    particleSystem.minEmitPower = 1;
-    particleSystem.maxEmitPower = 3;
-    particleSystem.updateSpeed = 0.005;
-
 
 
 
@@ -554,23 +407,45 @@ var createScene = function() {
         }
     }
 
-
+var meshsource;
+var meshdestination;
 
     function createFlux() { // fonction de création de flux, définit l'animation et la lance.
+
         var cubesource,cubedestination;
-        cubesource =  new BABYLON.Mesh.CreateBox("cubesource", 5, scene);
-        cubesource.parent = meshesFlux[0];
-        cubesource.position.y += 1.5;
-        cubesource.isVisible = false;
-        cubedestination =  new BABYLON.Mesh.CreateBox("cubedestination", 5, scene);
-        cubedestination.parent = meshesFlux[1];
-        cubedestination.position.y +=1.5;
+        if(scene.getMeshByID(meshesFlux[0].id+"_cube")){
+          cubesource = scene.getMeshByID(meshesFlux[0].id+"_cube");
+        }
+        else {
+          cubesource =  new BABYLON.Mesh.CreateBox("cubesource", 1, scene); //on crée un cube qui servira d'émetteur du flux et sera situé au niveau du premier objet de la liste
+          cubesource.id = meshesFlux[0].id+"_cube";
+          // cubesource.parent = meshesFlux[0];
+          cubesource.position.x = meshesFlux[0].position.x + meshesFlux[0].pointflux.x; // la position du cube emetteur est celle du point de flux de l'objet
+          cubesource.position.y = meshesFlux[0].position.y + meshesFlux[0].pointflux.y;
+          cubesource.position.z = meshesFlux[0].position.z + meshesFlux[0].pointflux.z;
+          cubesource.isVisible = true;
+        }
 
-        cubedestination.isVisible = false;
 
-        const pSource = cubesource.getAbsolutePosition(); // le point A est le premier objet de la liste
-        const pDestination = cubedestination.getAbsolutePosition(); // le point B est le deuxième objet de la liste
+
+        if(scene.getMeshByID(meshesFlux[1].id+"_cube")){
+          cubedestination = scene.getMeshByID(meshesFlux[1].id+"_cube");
+        } else {
+        cubedestination =  new BABYLON.Mesh.CreateBox("cubedestination", 1, scene); // on reproduit la même chose avec le cube recepteur
+        cubedestination.id = meshesFlux[1].id+"_cube";
+        // cubedestination.parent = meshesFlux[1];
+        cubedestination.position.x = meshesFlux[1].position.x + meshesFlux[1].pointflux.x;
+        cubedestination.position.y = meshesFlux[1].position.y + meshesFlux[1].pointflux.y;
+        cubedestination.position.z = meshesFlux[1].position.z + meshesFlux[1].pointflux.z;
+        cubedestination.isVisible = true;
+      }
+
+
+
+        const pSource = cubesource.getAbsolutePosition(); // la source de l'animation est le cube emetteur
+        const pDestination = cubedestination.getAbsolutePosition(); // la destination de l'animation est le cube recpteur
         const sphere = BABYLON.Mesh.CreateSphere("fluxhandler", 20, 4.0, scene); // crée une sphère, qui sera la source des particules
+
 
         /* PARTICULES ASSOCIEES A LA SPHERE */
         var ps = new BABYLON.ParticleSystem("stream", 2000, scene);
@@ -578,9 +453,9 @@ var createScene = function() {
 
 
         // Colors of all particles
-        ps.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
-        ps.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
-        ps.colorDead = new BABYLON.Color4(0.1, 0.2, 0.2, 0.3);
+        ps.color1 = new BABYLON.Color3(0, 0, 1.0);
+        ps.color2 = new BABYLON.Color3(1, 0, 0);
+        ps.colorDead = new BABYLON.Color3(0, 1, 0);
 
         // Size of each particle (random between...
         ps.minSize = 2;
@@ -604,8 +479,8 @@ var createScene = function() {
         ps.maxAngularSpeed = Math.PI;
 
         // Speed
-        ps.minEmitPower = 25;
-        ps.maxEmitPower = 25;
+        ps.minEmitPower = 20;
+        ps.maxEmitPower = 20;
         ps.updateSpeed = 0.05;
 
         // Where the particles come from
@@ -622,7 +497,7 @@ var createScene = function() {
         /**************************************************************/
 
         const material = new BABYLON.StandardMaterial('texture', scene);
-        material.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        material.diffuseColor = new BABYLON.Color3(0, 1, 0); // on donne une couleur à la sphère, mais on va la rendre invisible par la suite
         sphere.material = material;
         sphere.visibility = 0; //rend la sphère invisible, pour voir seulement les particules
         const animation = new BABYLON.Animation('flux', 'position', 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
@@ -642,82 +517,6 @@ var createScene = function() {
     }
 
 
-    // function createFlux() { // fonction de création de flux, définit l'animation et la lance.
-    //
-    //     const pSource = meshesFlux[0].position; // le point A est le premier objet de la liste
-    //     const pDestination = meshesFlux[1].position; // le point B est le deuxième objet de la liste
-    //     const sphere = BABYLON.Mesh.CreateSphere("fluxhandler", 20, 4.0, scene); // crée une sphère, qui sera la source des particules
-    //
-    //     /* PARTICULES ASSOCIEES A LA SPHERE */
-    //     var ps = new BABYLON.ParticleSystem("stream", 2000, scene);
-    //     ps.particleTexture = new BABYLON.Texture("/usine3D/FromScratch/textures/flares.png", scene);
-    //
-    //
-    //     // Colors of all particles
-    //     ps.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
-    //     ps.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
-    //     ps.colorDead = new BABYLON.Color4(0.1, 0.2, 0.2, 0.3);
-    //
-    //     // Size of each particle (random between...
-    //     ps.minSize = 2;
-    //     ps.maxSize = 2;
-    //
-    //     // Life time of each particle (random between...
-    //     ps.minLifeTime = 2.7;
-    //     ps.maxLifeTime = 2.7;
-    //
-    //     // Emission rate
-    //     ps.emitRate = 8;
-    //
-    //     // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
-    //     ps.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-    //
-    //     // Set the gravity of all particles
-    //
-    //
-    //     // Angular speed, in radians
-    //     ps.minAngularSpeed = 0;
-    //     ps.maxAngularSpeed = Math.PI;
-    //
-    //     // Speed
-    //     ps.minEmitPower = 25;
-    //     ps.maxEmitPower = 25;
-    //     ps.updateSpeed = 0.05;
-    //
-    //     // Where the particles come from
-    //     ps.minEmitBox = new BABYLON.Vector3(0, 0, 1); // Starting all from          //
-    //     ps.maxEmitBox = new BABYLON.Vector3(0, 0, 1); // To...                      //
-    //     //
-    //     // Direction of each particle after it has been emitted                    //
-    //     ps.direction1 = new BABYLON.Vector3(0, 0, 0); // ----------------- Valeurs par tatonnement, semble fonctionner mais pas d'explication
-    //     ps.direction2 = new BABYLON.Vector3(0, 0, 0); //
-    //
-    //     ps.emitter = sphere;
-    //
-    //     ps.start();
-    //     /**************************************************************/
-    //
-    //     const material = new BABYLON.StandardMaterial('texture', scene);
-    //     material.diffuseColor = new BABYLON.Color3(0, 1, 0);
-    //     sphere.material = material;
-    //     sphere.visibility = 0; //rend la sphère invisible, pour voir seulement les particules
-    //     const animation = new BABYLON.Animation('flux', 'position', 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    //
-    //     const keys = [{
-    //             frame: 0,
-    //             value: pSource,
-    //         },
-    //         {
-    //             frame: 30,
-    //             value: pDestination,
-    //         },
-    //     ];
-    //     animation.setKeys(keys);
-    //     sphere.animations.push(animation);
-    //     scene.beginAnimation(sphere, 0, 30, true);
-    // }
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Gestion des boutons    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -726,15 +525,22 @@ var createScene = function() {
     /** On récupère les éléments qui ont été créés dynamiquement grâce à jquery, dès que le document est chargé. On utilise jquery car
     les éléments ont été insérés via jquery */
     $(document).ready(function() {
-        $("#biblio").hide();
-        $("#formrotation").hide();
+
         $(document).on("click", "#toggler", function() {
             $("#biblio").toggle(400);
+            $("#flechebibli").toggleClass("toggledown"); //l'icone de flèche change sa classe de toggleup vers toggledown, et obtient donc de nouvelles propriétés css ( se retourne)
             return false;
         });
         $(document).on("click", "#toggler2", function() {
             $("#formrotation").toggle(400);
+            $("#flecherot").toggleClass("toggledown");//l'icone de flèche change sa classe de toggleup vers toggledown, et obtient donc de nouvelles propriétés css ( se retourne)
             return false;
+        });
+        $(document).on("click","#joinNow", function(){
+          canvas.removeEventListener("dblclick", selection); // - on enlève l'écouteur de doubleclick
+          joinNow.style.display = "none"; // - on fait disparaître le bouton "join"
+          // joinM(selectedmeshes[0], 1, selectedmeshes); // - puis on appelle la fonction récursive
+          BABYLON.Mesh.MergeMeshes(selectedmeshes);
         });
 
         $(document).on("click", "#clickbox", function() { //ajout d'un cube
@@ -766,6 +572,15 @@ var createScene = function() {
         })
         $(document).on("click", "#clickrail", function() {
             addrail(scene);
+        })
+        $(document).on("click","#cuisiniere", function(){
+          addcuisine(scene);
+        })
+        $(document).on("click","#clickpalette", function(){
+          addpalette(scene);
+        })
+        $(document).on("click", "#clickcuve", function(){
+          addcuve(scene);
         })
         $(document).on("click", "#deleteM", function() { //suppression de l'objet selectionné
             deleteMesh();
@@ -803,6 +618,14 @@ var createScene = function() {
                     i--;
                 }
             }
+            imported = false;
+        });
+
+        $(document).on("click","#importjson",function(){
+          if(imported === false){
+              LoadJson();
+              imported = true;
+          }
         });
         $(document).on("click", "#checkground", function() { // choix du plan 2d au sol ou non
             checkGround();
@@ -843,29 +666,44 @@ var createScene = function() {
             }
         });
 
+        $(document).on("click","#tab1", function(evt){
+          openContent(evt, "content1");
+        })
+        $(document).on("click","#tab2", function(evt){
+          openContent(evt, "content2");
+        })
+        $(document).on("click","#tab3", function(evt){
+          openContent(evt,"content3");
+        })
+        $(document).on("click", "#toggler",function(evt){
+          $(".selectedcontent").click(); //sélectionne le premier onglet en tant que défaut à chaque fois qu'on déroule la bibliothèque
+        })
+
     });
     /**************************************************************************************/
-    //ADDBOX
 
-    if ($('#clickbox').length) {
-        $('#clicbox').remove();
-    }
+    // Fonction qui gère la éléction des onglets dans la bibliothèque d'import d'objets
+    function openContent(evt, contentName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
 
-    //ADDSPHERE
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
 
-    if ($('#clicksphere').length) {
-        $('#clicksphere').remove();
-    }
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
 
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(contentName).style.display = "flex";
+        evt.currentTarget.className += " active";
+}
 
-    //ADDOBJECT
-
-    if ($('#clickobj').length) {
-        $('#clickobj').remove();
-
-
-
-    };
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////      Gestion du sol           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -940,7 +778,7 @@ var createScene = function() {
             camera.attachControl(canvas, true);
             startingPoint = null;
             if (selectedMesh && selectedMesh.id != "mur") {
-                particleSystem.stop(); // on arrête l'émission de particules lorsque l'objet n'est plus en mouvement
+            //    particleSystem.stop(); // on arrête l'émission de particules lorsque l'objet n'est plus en mouvement
             }
             return;
         }
@@ -958,11 +796,16 @@ var createScene = function() {
         }
         if (currentMesh.parent) currentMesh = currentMesh.parent;
         if (selectedMesh && selectedMesh.id != "mur") {
-            particleSystem.start(); //lorsque l'objet est déplacé on émet des particules
+        //    particleSystem.start(); //lorsque l'objet est déplacé on émet des particules
         }
 
         var diff = current.subtract(startingPoint);
         currentMesh.position.addInPlace(diff);
+        var cube = scene.getMeshByID(currentMesh.id+"_cube");
+        if(cube){
+          cube.position.addInPlace(diff);
+        }
+
 
         startingPoint = current;
 
@@ -991,6 +834,7 @@ var createScene = function() {
 var scene1 = createScene(); // on crée une scène
 engine.runRenderLoop(function() {
     scene1.render(); // refresh de la scene a chaque frame
+    engine.resize();
 });
 
 
@@ -1011,9 +855,7 @@ canvas.addEventListener("mouseout", function() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     redimension des objets en fonction de la fenetre   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// window.addEventListener('resize', function() {
-//     engine.resize(); //écouteur d'évènement lié à la fenêtre, lorsqu'on réduit celle-ci le canvas et les objets réduisent aussi pour s'adapter (s'aggrandissent)
-// });
+
 $(window).resize(function() {
     engine.resize();
 });

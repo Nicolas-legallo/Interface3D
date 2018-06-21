@@ -1401,11 +1401,13 @@ var createScene = function() {
     }
 
     function createFlux(a, b) { // fonction de création de flux, définit l'animation et la lance.
+
     /* Point de flux idéal des lignes de prod : mesh.position.x + 3,  8 , mesh.position.z-30 */
     /* Point de flux idéal des stocks1 : mesh.position.x, mesh.position.y+2, mesh.position.z; */
     /* Point de flux idéal des chariots : mesh.position.x, mesh.position.y + 0,5, mesh.position.z; */
     /* Point de flux idéal des caméras : mesh.position.x, mesh.position.y + 1,5, mesh.position.z; */
     /* Point de flux idéal */
+
         const pSource = a; // le point A est le premier objet de la liste
         const pDestination = b; // le point B est le deuxième objet de la liste
         const sphere = BABYLON.Mesh.CreateSphere("fluxhandler", 20, 4.0, scene); // crée une sphère, qui sera la source des particules
@@ -1416,9 +1418,9 @@ var createScene = function() {
 
 
         // Colors of all particles
-        ps.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
-        ps.color2 = new BABYLON.Color4(0.5, 0.7, 1.0, 1.0);
-        ps.colorDead = new BABYLON.Color4(0.1, 0.2, 0.2, 0.3);
+        ps.color1 = new BABYLON.Color3(0, 0, 1.0);
+        ps.color2 = new BABYLON.Color3(1, 0, 0);
+        ps.colorDead = new BABYLON.Color3(0, 1, 0);
 
         // Size of each particle (random between...
         ps.minSize = 2;
@@ -1490,14 +1492,14 @@ var createScene = function() {
     $(document).ready(function() {
         // $("#formrotation").hide();
         // $("#biblio").hide();
-        $(document).on("click", "#toggler", function() {
-            $("#biblio").toggle(400);
-            $("#flechebibli").toggleClass("toggledown");
+        $(document).on("click", "#toggler", function() { //animation d'affichage lorsqu'on clique sur "importer un objet"
+            $("#biblio").toggle(400); // lance une animation d'affichage qui dure 400ms
+            $("#flechebibli").toggleClass("toggledown"); //l'icone de flèche change sa classe de toggleup vers toggledown, et obtient donc de nouvelles propriétés css ( se retourne)
             return false;
         });
-        $(document).on("click", "#toggler2", function() {
-            $("#formrotation").toggle(400);
-            $("#flecherot").toggleClass("toggledown");
+        $(document).on("click", "#toggler2", function() { //animation d'affichage lorsqu'on clique sur "paramètres globaux"
+            $("#formrotation").toggle(400);// lance une animation d'affichage qui dure 400ms
+            $("#flecherot").toggleClass("toggledown");//l'icone de flèche change sa classe de toggleup vers toggledown, et obtient donc de nouvelles propriétés css ( se retourne)
             return false;
         });
         $(document).on("click", "#checkground", function() { // choix du plan 2d au sol ou non
@@ -1510,37 +1512,37 @@ var createScene = function() {
         $(document).on("click", "#clicksphere", function() { //ajout d'une sphere
             addSphere();
         });
-        $(document).on("click", "#clickligneprod", function() { //ajout d'un obj importé
+        $(document).on("click", "#clickligneprod", function() { //ajout d'une ligne de prod
             addligneprod(scene);
         });
-        $(document).on("click", "#clickchariot", function() {
+        $(document).on("click", "#clickchariot", function() { // ajout d'un objet chariot élévateur
             addchariot(scene);
         })
-        $(document).on("click", "#clickstock1", function() {
+        $(document).on("click", "#clickstock1", function() { // ajout de l'objet stock
             addstock1(scene);
         })
-        $(document).on("click", "#clickstock2", function() {
+        $(document).on("click", "#clickstock2", function() { // ajout de l'objet stock 2
             addstock2(scene);
         })
-        $(document).on("click", "#clickstock3", function() {
+        $(document).on("click", "#clickstock3", function() { // ajout de l'objet stock 3
             addstock3(scene);
         })
-        $(document).on("click", "#clickcamera", function() {
+        $(document).on("click", "#clickcamera", function() { //ajout de l'objet camera
             addcamera(scene);
         })
-        $(document).on("click", "#clickcopilote", function() {
+        $(document).on("click", "#clickcopilote", function() { // ajout de l'objet poste copilote
             addcopilote(scene);
         })
-        $(document).on("click", "#clickrail", function() {
+        $(document).on("click", "#clickrail", function() { //ajout de l'objet rail
             addrail(scene);
         })
-        $(document).on("click", "#deleteM", function() {
+        $(document).on("click", "#deleteM", function() { // suppression de l'objet sélectionné
             var pickResult = scene.pick(scene.pointerX, scene.pointerY);
             if (pickResult.hit && pickResult.pickedMesh != ground) {
                 selectedMesh.dispose();
             }
         });
-        $(document).on("click", "#addWall", function() {
+        $(document).on("click", "#addWall", function() { //création d'un mur
             addWall();
         });
         // Ecouteur d'évènements Jquery sur le bouton valider de la modification de scaling, lance la fonction de modification lorsqu'il est cliqué
@@ -1561,7 +1563,7 @@ var createScene = function() {
                 $("#infotemp").remove();
                 $("#infosmesh").append(pickResult2.pickedMesh.informations);
                 $("#infotemp").css("visibility", "visible");
-                $("#infotemp").css({
+                $("#infotemp").css({ //le menu est un peu décalé par rapport au curseur de la souris pour une meilleure visibilité
                     'left': evt.pageX - 45,
                     'top': evt.pageY - 95
                 });
@@ -1581,13 +1583,13 @@ var createScene = function() {
         })
 
         $(document).on("click","#tab1", function(evt){
-          openCity(evt, "content1");
+          openContent(evt, "content1"); //affiche la 1ere catégorie d'objets
         })
         $(document).on("click","#tab2", function(evt){
-          openCity(evt, "content2");
+          openContent(evt, "content2"); //affiche la 2eme catégorie d'objets
         })
         $(document).on("click","#tab3", function(evt){
-          openCity(evt,"content3");
+          openContent(evt,"content3"); //affiche la 3eme catégorie d'objets
         })
         $(document).on("click", "#toggler",function(evt){
           $(".selectedcontent").click(); //sélectionne le premier onglet en tant que défaut à chaque fois qu'on déroule la bibliothèque
@@ -1595,9 +1597,9 @@ var createScene = function() {
     });
 
 
-
-    function openCity(evt, cityName) {
-        // Declare all variables
+// Fonction appelée à chaque clic sur une catégorie d'objets dans la bibliothèque d'import d'objets
+// Quand on veut afficher un contenu, on cache d'abord tous les contenus puis on affiche celui qu'on voulit afficher.
+    function openContent(evt, contentName) {
         var i, tabcontent, tablinks;
 
         // Get all elements with class="tabcontent" and hide them
@@ -1613,7 +1615,7 @@ var createScene = function() {
         }
 
         // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(cityName).style.display = "flex";
+        document.getElementById(contentName).style.display = "flex";
         evt.currentTarget.className += " active";
 }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
